@@ -41,23 +41,23 @@ kafka-topics.sh --command-config playground.config --bootstrap-server cluster.pl
 
 kafka-topics.sh 
 
-kafka-topics.sh --bootstrap-server localhost:9092 --list 
+kafka-topics.sh --bootstrap-server localhost:9093 --list 
 
-kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --create
+kafka-topics.sh --bootstrap-server localhost:9093 --topic first_topic --create
 
-kafka-topics.sh --bootstrap-server localhost:9092 --topic second_topic --create --partitions 3
+kafka-topics.sh --bootstrap-server localhost:9093 --topic second_topic --create --partitions 3
 
-kafka-topics.sh --bootstrap-server localhost:9092 --topic third_topic --create --partitions 3 --replication-factor 2
+kafka-topics.sh --bootstrap-server localhost:9093 --topic third_topic --create --partitions 3 --replication-factor 2
 
 # Create a topic (working)
-kafka-topics.sh --bootstrap-server localhost:9092 --topic third_topic --create --partitions 3 --replication-factor 1
+kafka-topics.sh --bootstrap-server localhost:9093 --topic third_topic --create --partitions 3 --replication-factor 1
 
 # List topics
-kafka-topics.sh --bootstrap-server localhost:9092 --list 
+kafka-topics.sh --bootstrap-server localhost:9093 --list 
 
 # Describe a topic
-kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --describe
+kafka-topics.sh --bootstrap-server localhost:9093 --topic first_topic --describe
 
 # Delete a topic 
-kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --delete
+kafka-topics.sh --bootstrap-server localhost:9093 --topic first_topic --delete
 # (only works if delete.topic.enable=true)
