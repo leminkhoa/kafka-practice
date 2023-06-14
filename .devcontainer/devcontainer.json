@@ -25,7 +25,12 @@
 		 	"settings": { 
 		  		"python.linting.enabled": false,
 				"workbench.colorTheme": "Default Dark+"
-				}
+				},
+				"extensions": [
+					"vscjava.vscode-gradle",
+					"ms-azuretools.vscode-docker",
+					"vscjava.vscode-java-pack"
+				]
 			}
 		},
 
