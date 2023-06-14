@@ -1,0 +1,91 @@
+version: '2'
+services:
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka-kraft-0
+      - kafka-kraft-1
+      - schema-registry0
+
+    environment:
+      KAFKA_CLUSTERS_0_NAME: Kafka-Cluster-0
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-kraft-0:29092
+      KAFKA_CLUSTERS_0_JMXPORT: 9997
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry0:8085
+      KAFKA_CLUSTERS_1_NAME: Kafka-Cluster-1
+      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: kafka-kraft-1:29092
+      KAFKA_CLUSTERS_1_JMXPORT: 9998
+      KAFKA_CLUSTERS_1_SCHEMAREGISTRY: http://schema-registry0:8085
+
+  kafka-kraft-0:
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - 9092:9092
+      - 9997:9997
+    environment:
+      CLUSTER_ID: "AkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_LISTENERS: "PLAINTEXT://kafka-kraft-0:29092,CONTROLLER://kafka-kraft-0:29093,PLAINTEXT_HOST://0.0.0.0:9092"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-kraft-0:29092,PLAINTEXT_HOST://localhost:9092"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-kraft-0:29093"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_JMX_PORT: 9997
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_HOURS: 168
+
+
+  kafka-kraft-1:
+    image: confluentinc/cp-kafka:7.4.0
+    ports:
+      - 9093:9093
+      - 9998:9998
+    environment:
+      CLUSTER_ID: "BkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_LISTENERS: "PLAINTEXT://kafka-kraft-1:29092,CONTROLLER://kafka-kraft-1:29093,PLAINTEXT_HOST://0.0.0.0:9093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-kraft-1:29092,PLAINTEXT_HOST://localhost:9093"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-kraft-1:29093"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_JMX_PORT: 9998
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_HOURS: 168
+
+
+  schema-registry0:
+    image: confluentinc/cp-schema-registry:7.4.0
+    ports:
+      - 8085:8085
+    depends_on:
+      - kafka-kraft-0
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-kraft-0:29092
+      SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: PLAINTEXT
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry0
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry0:8085
+      SCHEMA_REGISTRY_SCHEMA_REGISTRY_INTER_INSTANCE_PROTOCOL: "http"
+      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
+      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
+
+  kafka-init-topics:
+    image: confluentinc/cp-kafka:7.4.0
+    volumes:
+       - ./message.json:/data/message.json
+    depends_on:
+      - kafka-kraft-0
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+               cub kafka-ready -b kafka-kraft-0:29092 1 30 && \
+               kafka-topics --create --topic second.users --partitions 3 --replication-factor 1 --if-not-exists --bootstrap-server kafka-kraft-0:29092 && \
+               kafka-topics --create --topic second.messages --partitions 2 --replication-factor 1 --if-not-exists --bootstrap-server kafka-kraft-0:29092 && \
+               kafka-topics --create --topic first.messages --partitions 2 --replication-factor 1 --if-not-exists --bootstrap-server kafka-kraft-0:29092 && \
+               kafka-console-producer --bootstrap-server kafka-kraft-0:29092 --topic second.users < /data/message.json'"
