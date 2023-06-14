@@ -31,7 +31,7 @@ kafka-topics.sh --bootstrap-server localhost:9093 --topic third_topic --create -
 # start one consumer
 kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic third_topic --group my-first-application
 
-# start one producer and start producing
+# start one producer and start producing, notice the message behinds in UI
 kafka-console-producer.sh --bootstrap-server localhost:9093 --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner --topic third_topic
 
 # start another consumer part of the same group. See messages being spread
