@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'kafka-course'
-include('app')
+include('kafka_basics')

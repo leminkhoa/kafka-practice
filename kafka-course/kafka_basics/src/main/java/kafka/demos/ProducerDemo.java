@@ -1,4 +1,4 @@
-package kafka.course;
+package kafka.demos;
 
 import java.util.Properties;
 
