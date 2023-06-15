@@ -1,18 +1,17 @@
-# kafka-beginners-course
+# Kafka Practice
+This repository is used for praticing Kafka's purposes.
 
-## Installation
+## Getting Started
 
-## Kafka local
+### Start Docker 
+Within bash terminal, run:
 ```
-wget https://downloads.apache.org/kafka/3.4.1/kafka_2.13-3.4.1.tgz
-tar -xzf kafka_2.13-3.4.1.tgz
-```
-
-## Add Kafka PATH
-In ~/.bashrc, add one row:
-```
-echo 'PATH=\"$PATH:/workspaces/kafka-practice/kafka_2.13-3.4.1/bin\"' >> ~/.bashrc
+cd kafka-deployments
+docker-compose up
 ```
 
-## Kafka UI
-docker-compose reference: https://mullerfourie.medium.com/run-a-local-kafka-server-on-linux-3f50b0bb7493
+
+## References
+Deploy Kafka in Kraft mode: https://docs.kafka-ui.provectus.io/configuration/complex-configuration-examples/kraft-mode-+-multiple-brokers
+Medium article: https://mullerfourie.medium.com/run-a-local-kafka-server-on-linux-3f50b0bb7493
+docker-compose template: https://github.com/confluentinc/cp-all-in-one/blob/7.4.0-post/cp-all-in-one-kraft/docker-compose.yml
