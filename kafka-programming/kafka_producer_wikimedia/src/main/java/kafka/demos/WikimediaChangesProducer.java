@@ -35,7 +35,7 @@ public class WikimediaChangesProducer {
         EventSource eventSource = builder.build();
 
         // start the producer in another thread
-        eventSource.start()
+        eventSource.start();
 
     }
 }
