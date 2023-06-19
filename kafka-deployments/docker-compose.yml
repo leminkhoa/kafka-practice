@@ -6,14 +6,14 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - broker-0
       - broker-1
       - broker-2
+      - broker-3
       - schema-registry
 
     environment:
       KAFKA_CLUSTERS_0_NAME: Cluster imGSURrBTNW23VT28OuLJg
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker-0:29092,broker-1:29092,broker-2:29092
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker-1:29092,broker-2:29092,broker-3:29092
       KAFKA_CLUSTERS_0_JMXPORT: 9103,9104,9105
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
   
@@ -26,14 +26,14 @@ services:
       - "9092:9092"
       - "9102:9102"
     environment:
-      KAFKA_NODE_ID: 1
+      KAFKA_NODE_ID: 0
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_JMX_PORT: 9102
       KAFKA_JMX_HOSTNAME: localhost
       KAFKA_PROCESS_ROLES: 'controller'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@controller:9092'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '0@controller:9092'
       KAFKA_LISTENERS: 'CONTROLLER://controller:9092'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
@@ -43,20 +43,20 @@ services:
       CLUSTER_ID: 'imGSURrBTNW23VT28OuLJg'
   
   
-  broker-0:
+  broker-1:
     image: confluentinc/cp-kafka:7.4.0
-    hostname: broker-0
-    container_name: broker-0
+    hostname: broker-1
+    container_name: broker-1
     depends_on:
       - controller
     ports:
       - "9093:9093"
       - "9103:9103"
     environment:
-      KAFKA_NODE_ID: 2
-      BROKER_ID: 0
+      KAFKA_NODE_ID: 1
+      BROKER_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-0:29092,PLAINTEXT_HOST://localhost:9093'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-1:29092,PLAINTEXT_HOST://localhost:9093'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
@@ -65,8 +65,8 @@ services:
       KAFKA_JMX_PORT: 9103
       KAFKA_JMX_HOSTNAME: localhost
       KAFKA_PROCESS_ROLES: 'broker'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@controller:9092'
-      KAFKA_LISTENERS: 'PLAINTEXT://broker-0:29092,PLAINTEXT_HOST://0.0.0.0:9093'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '0@controller:9092'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker-1:29092,PLAINTEXT_HOST://0.0.0.0:9093'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
@@ -74,37 +74,6 @@ services:
       # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
       CLUSTER_ID: 'imGSURrBTNW23VT28OuLJg'
 
-
-  broker-1:
-    image: confluentinc/cp-kafka:7.4.0
-    hostname: broker-1
-    container_name: broker-1
-    depends_on:
-      - controller
-    ports:
-      - "9094:9094"
-      - "9104:9104"
-    environment:
-      KAFKA_NODE_ID: 3
-      BROKER_ID: 1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-1:29092,PLAINTEXT_HOST://localhost:9094'
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_JMX_PORT: 9104
-      KAFKA_JMX_HOSTNAME: localhost
-      KAFKA_PROCESS_ROLES: 'broker'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@controller:9092'
-      KAFKA_LISTENERS: 'PLAINTEXT://broker-1:29092,PLAINTEXT_HOST://0.0.0.0:9094'
-      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
-      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
-      # Replace CLUSTER_ID with a unique base64 UUID using "bin/kafka-storage.sh random-uuid" 
-      # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
-      CLUSTER_ID: 'imGSURrBTNW23VT28OuLJg'
 
   broker-2:
     image: confluentinc/cp-kafka:7.4.0
@@ -113,13 +82,44 @@ services:
     depends_on:
       - controller
     ports:
+      - "9094:9094"
+      - "9104:9104"
+    environment:
+      KAFKA_NODE_ID: 2
+      BROKER_ID: 2
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-2:29092,PLAINTEXT_HOST://localhost:9094'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9104
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_PROCESS_ROLES: 'broker'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '0@controller:9092'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker-2:29092,PLAINTEXT_HOST://0.0.0.0:9094'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      # Replace CLUSTER_ID with a unique base64 UUID using "bin/kafka-storage.sh random-uuid" 
+      # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
+      CLUSTER_ID: 'imGSURrBTNW23VT28OuLJg'
+
+  broker-3:
+    image: confluentinc/cp-kafka:7.4.0
+    hostname: broker-3
+    container_name: broker-3
+    depends_on:
+      - controller
+    ports:
       - "9095:9095"
       - "9105:9105"
     environment:
-      KAFKA_NODE_ID: 4
-      BROKER_ID: 2
+      KAFKA_NODE_ID: 3
+      BROKER_ID: 3
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-2:29092,PLAINTEXT_HOST://localhost:9095'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-3:29092,PLAINTEXT_HOST://localhost:9095'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
@@ -128,8 +128,8 @@ services:
       KAFKA_JMX_PORT: 9105
       KAFKA_JMX_HOSTNAME: localhost
       KAFKA_PROCESS_ROLES: 'broker'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@controller:9092'
-      KAFKA_LISTENERS: 'PLAINTEXT://broker-2:29092,PLAINTEXT_HOST://0.0.0.0:9095'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '0@controller:9092'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker-3:29092,PLAINTEXT_HOST://0.0.0.0:9095'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
@@ -142,15 +142,15 @@ services:
       hostname: schema-registry
       container_name: schema-registry
       depends_on:
-        - broker-0
         - broker-1
         - broker-2
+        - broker-3
         - controller
       ports:
         - "8081:8081"
       environment:
         SCHEMA_REGISTRY_HOST_NAME: schema-registry
-        SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker-0:29092,broker-1:29092,broker-2:29092'
+        SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker-1:29092,broker-2:29092,broker-3:29092'
         SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   # rest-proxy:
@@ -170,15 +170,14 @@ services:
   #     KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
 
-  # kafka-init-topics:
-  #   image: confluentinc/cp-kafka:7.4.0
-  #   volumes:
-  #      - ./message.json:/data/message.json
-  #   depends_on:
-  #     - kafka-kraft-0
-  #   command: "bash -c 'echo Waiting for Kafka to be ready... && \
-  #              cub kafka-ready -b kafka-kraft-0:29092 1 30 && \
-  #              kafka-topics --create --topic second.users --partitions 3 --replication-factor 1 --if-not-exists --bootstrap-server kafka-kraft-0:29092 && \
-  #              kafka-topics --create --topic second.messages --partitions 2 --replication-factor 1 --if-not-exists --bootstrap-server kafka-kraft-0:29092 && \
-  #              kafka-topics --create --topic first.messages --partitions 2 --replication-factor 1 --if-not-exists --bootstrap-server kafka-kraft-0:29092 && \
-  #              kafka-console-producer --bootstrap-server kafka-kraft-0:29092 --topic second.users < /data/message.json'"
+  kafka-init-topics:
+    image: confluentinc/cp-kafka:7.4.0
+    volumes:
+       - ./message.json:/data/message.json
+    depends_on:
+      - broker-1
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+               cub kafka-ready -b broker-1:29092 1 30 && \
+               kafka-topics --create --topic demo_java --partitions 3 --replication-factor 3 --if-not-exists --bootstrap-server broker-1:29092 && \
+               kafka-topics --create --topic hello_world --partitions 3 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092 && \
+               kafka-console-producer --bootstrap-server broker-1:29092 --topic hello_world < /data/message.json'"
