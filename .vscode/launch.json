@@ -1,0 +1,71 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+        },
+        {
+            "type": "java",
+            "name": "ConsumerDemo",
+            "request": "launch",
+            "mainClass": "kafka.demos.ConsumerDemo",
+            "projectName": "kafka_basics"
+        },
+        {
+            "type": "java",
+            "name": "ConsumerDemoCooperative",
+            "request": "launch",
+            "mainClass": "kafka.demos.ConsumerDemoCooperative",
+            "projectName": "kafka_basics"
+        },
+        {
+            "type": "java",
+            "name": "ConsumerDemoWithShutdown",
+            "request": "launch",
+            "mainClass": "kafka.demos.ConsumerDemoWithShutdown",
+            "projectName": "kafka_basics"
+        },
+        {
+            "type": "java",
+            "name": "ProducerDemo",
+            "request": "launch",
+            "mainClass": "kafka.demos.ProducerDemo",
+            "projectName": "kafka_basics"
+        },
+        {
+            "type": "java",
+            "name": "ProducerDemoKeys",
+            "request": "launch",
+            "mainClass": "kafka.demos.ProducerDemoKeys",
+            "projectName": "kafka_basics"
+        },
+        {
+            "type": "java",
+            "name": "ProducerDemoWithCallBack",
+            "request": "launch",
+            "mainClass": "kafka.demos.ProducerDemoWithCallBack",
+            "projectName": "kafka_basics"
+        },
+        {
+            "type": "java",
+            "name": "OpenSearchConsumer",
+            "request": "launch",
+            "mainClass": "kafka.demos.OpenSearchConsumer",
+            "projectName": "kafka_consumer_opensearch",
+            "cwd": "${fileDirname}"
+        },
+        {
+            "type": "java",
+            "name": "WikimediaChangesProducer",
+            "request": "launch",
+            "mainClass": "kafka.demos.WikimediaChangesProducer",
+            "projectName": "kafka_producer_wikimedia"
+        }
+    ]
+}
