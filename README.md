@@ -10,6 +10,11 @@ cd kafka-deployments
 docker-compose up
 ```
 
+### OpenSearch Account
+For practices in the project [kafka_consumer_opensearch](/kafka-programming/kafka_consumer_opensearch/)
+- Sign up an account at [https://bonsai.io/](https://bonsai.io/)
+- Create a sand-box cluster
+- For quick start, find documentations at [https://opensearch.org/docs/latest/quickstart/](https://opensearch.org/docs/latest/quickstart/)
 
 ## References
 - Deploy Kafka in Kraft mode: https://docs.kafka-ui.provectus.io/configuration/complex-configuration-examples/kraft-mode-+-multiple-brokers
