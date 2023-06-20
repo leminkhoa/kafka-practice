@@ -173,11 +173,12 @@ services:
   kafka-init-topics:
     image: confluentinc/cp-kafka:7.4.0
     volumes:
-       - ./message.json:/data/message.json
+       - ./data/message.json:/data/message.json
     depends_on:
       - broker-1
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
                cub kafka-ready -b broker-1:29092 1 30 && \
                kafka-topics --create --topic demo_java --partitions 3 --replication-factor 3 --if-not-exists --bootstrap-server broker-1:29092 && \
                kafka-topics --create --topic hello_world --partitions 3 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092 && \
-               kafka-console-producer --bootstrap-server broker-1:29092 --topic hello_world < /data/message.json'"
+               kafka-console-producer --bootstrap-server broker-1:29092 --topic hello_world < /data/message.json' &&
+               kafka-topics --create --topic wikimedia.recentchange --partitions 1 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092"
