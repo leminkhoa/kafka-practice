@@ -206,8 +206,8 @@ services:
                cub kafka-ready -b broker-1:29092 1 30 && \
                kafka-topics --create --topic demo_java --partitions 3 --replication-factor 3 --if-not-exists --bootstrap-server broker-1:29092 && \
                kafka-topics --create --topic hello_world --partitions 3 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092 && \
-               kafka-console-producer --bootstrap-server broker-1:29092 --topic hello_world < /data/message.json' &&
-               kafka-topics --create --topic wikimedia.recentchange --partitions 1 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092"
+               kafka-console-producer --bootstrap-server broker-1:29092 --topic hello_world < /data/message.json && \
+               kafka-topics --create --topic wikimedia.recentchange --partitions 1 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092'"
 
 
 volumes:
