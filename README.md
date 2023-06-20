@@ -3,6 +3,10 @@ This repository is used for praticing Kafka's purposes.
 
 ## Getting Started
 
+### Kafka Version
+For this repository, we will use `Kafka 2.13-3.4.1` (Scala version 2.13 and Kafka version 3.4.1). You can download it [here](https://downloads.apache.org/kafka/3.4.1/kafka_2.13-3.4.1.tgz)
+
+
 ### Start Docker 
 Within bash terminal, run:
 ```
@@ -15,6 +19,19 @@ For practices in the project [kafka_consumer_opensearch](/kafka-programming/kafk
 - Sign up an account at [https://bonsai.io/](https://bonsai.io/)
 - Create a sand-box cluster
 - For quick start, find documentations at [https://opensearch.org/docs/latest/quickstart/](https://opensearch.org/docs/latest/quickstart/)
+
+
+### Kafka Connectors
+- Kafka connectors can be downloaded from [https://www.confluent.io/hub](https://www.confluent.io/hub)
+- For this specific project, we can download:
+    - Wikimedia connector: https://github.com/conduktor/kafka-connect-wikimedia
+        - Download the jar at https://github.com/conduktor/kafka-connect-wikimedia/releases
+    - Elastic Search sink connector: https://www.confluent.io/hub/confluentinc/kafka-connect-elasticsearch
+        - Click on `Download` to download the .zip file
+- From kafka folder, create a new folder name `connectors`, then paste the extracted connector into separate folder.
+- To use connector, we can run `connect-standalone.sh` ([sample](./kafka-extended/0-kafka-connect-wikimedia.sh))
+
+
 
 ## References
 - Deploy Kafka in Kraft mode: https://docs.kafka-ui.provectus.io/configuration/complex-configuration-examples/kraft-mode-+-multiple-brokers
