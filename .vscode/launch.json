@@ -6,9 +6,23 @@
     "configurations": [
         {
             "type": "java",
+            "name": "WikimediaStreamsApp",
+            "request": "launch",
+            "mainClass": "kafka.streams.WikimediaStreamsApp",
+            "projectName": "kafka_streams"
+        },
+        {
+            "type": "java",
+            "name": "HelloWorld",
+            "request": "launch",
+            "mainClass": "kafka.streams.processor.HelloWorld",
+            "projectName": "kafka_streams"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}",
+            "mainClass": "${file}"
         },
         {
             "type": "java",

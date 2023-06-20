@@ -11,3 +11,4 @@ rootProject.name = 'kafka-programming'
 include('kafka_basics')
 include('kafka_producer_wikimedia')
 include('kafka_consumer_opensearch')
+include('kafka_streams')
