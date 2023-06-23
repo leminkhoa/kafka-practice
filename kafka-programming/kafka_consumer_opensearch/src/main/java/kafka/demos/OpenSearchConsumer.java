@@ -99,15 +99,15 @@ public class OpenSearchConsumer {
 
     }
 
-    // private static String extractId(String json){
-    //     // gson library
-    //     return JsonParser.parseString(json)
-    //             .getAsJsonObject()
-    //             .get("meta")
-    //             .getAsJsonObject()
-    //             .get("id")
-    //             .getAsString();
-    // }
+    private static String extractId(String json){
+        // gson library
+        return JsonParser.parseString(json)
+                .getAsJsonObject()
+                .get("meta")
+                .getAsJsonObject()
+                .get("id")
+                .getAsString();
+    }
 
     public static void main(String[] args) {
 
@@ -159,21 +159,55 @@ public class OpenSearchConsumer {
 
             while(true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(3000));
+                
                 int recordCount = records.count();
-
                 log.info("Received " + recordCount + " record(s)");
+
+                BulkRequest bulkRequest = new BulkRequest();
 
                 for (ConsumerRecord<String, String> record: records) {
 
-                    // send the record into Open Search
-                    IndexRequest indexRequest = new IndexRequest(indexName)
-                        .source(record.value(), XContentType.JSON);
 
-                    IndexResponse response = openSearchClient.index(indexRequest, RequestOptions.DEFAULT);
+                    // strategy 1
+                    
+                    // define an ID using Kafka Record coordinates
+                    // String id = record.topic() + "_" + record.partition() + "_" + record.offset();
 
-                    log.info(response.getId());
+                    try {
+                        // strategy 2
 
+                        // we extract the ID from the JSON value
+                        String id = extractId(record.value());
+
+                        // send the record into Open Search
+                        IndexRequest indexRequest = new IndexRequest(indexName)
+                            .source(record.value(), XContentType.JSON)
+                            .id(id);
+
+                        // IndexResponse response = openSearchClient.index(indexRequest, RequestOptions.DEFAULT);
+
+                        bulkRequest.add(indexRequest);
+
+                        // log.info(response.getId());
+                    } catch (Exception e) {
+
+                    }
                 }
+                
+                if (bulkRequest.numberOfActions() > 0) {
+                    BulkResponse bulkResponse = openSearchClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+                    log.info("Inserted " + bulkResponse.getItems().length + " record(s)");
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // commit offsets after the batch is consumed
+                consumer.commitSync();
+                log.info("Offfsets have been commited");
             }
             
         } catch (WakeupException e) {

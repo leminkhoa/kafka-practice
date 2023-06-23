@@ -1,21 +1,45 @@
 version: '2'
 services:
 
+  # kafka-ui:
+  #   image: provectuslabs/kafka-ui:latest
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - broker-1
+  #     - broker-2
+  #     - broker-3
+  #     - schema-registry
+
+  #   environment:
+  #     KAFKA_CLUSTERS_0_NAME: Cluster imGSURrBTNW23VT28OuLJg
+  #     KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker-1:29092,broker-2:29092,broker-3:29092
+  #     KAFKA_CLUSTERS_0_JMXPORT: 9103,9104,9105
+  #     KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest
+    image: conduktor/conduktor-platform:latest
     ports:
       - 8080:8080
+    volumes:
+      - conduktor_data:/var/conduktor
+      - type: bind
+        source: "./platform-config.yml"
+        target: /opt/conduktor/platform-config.yaml
+        read_only: true
     depends_on:
       - broker-1
       - broker-2
       - broker-3
       - schema-registry
-
     environment:
-      KAFKA_CLUSTERS_0_NAME: Cluster imGSURrBTNW23VT28OuLJg
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker-1:29092,broker-2:29092,broker-3:29092
-      KAFKA_CLUSTERS_0_JMXPORT: 9103,9104,9105
-      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+      CDK_IN_CONF_FILE: /opt/conduktor/platform-config.yaml
+      KAFKA_BOOTSTRAP_SERVER: broker-1:29092,broker-2:29092,broker-3:29092
+      SR_SERVER: http://schema-registry:8081
+      ORGANISATION_NAME: "default"
+      CDK_ADMIN_EMAIL: "admin@conduktor.io"
+      CDK_ADMIN_PASSWORD: "admin"
+      CDK_CLUSTERS_0_JMXSCRAPEPORT: 9103,9104,9105
   
   
   controller:
@@ -173,11 +197,18 @@ services:
   kafka-init-topics:
     image: confluentinc/cp-kafka:7.4.0
     volumes:
-       - ./message.json:/data/message.json
+       - ./data/message.json:/data/message.json
     depends_on:
       - broker-1
+      - broker-2
+      - broker-3
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
                cub kafka-ready -b broker-1:29092 1 30 && \
                kafka-topics --create --topic demo_java --partitions 3 --replication-factor 3 --if-not-exists --bootstrap-server broker-1:29092 && \
                kafka-topics --create --topic hello_world --partitions 3 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092 && \
-               kafka-console-producer --bootstrap-server broker-1:29092 --topic hello_world < /data/message.json'"
+               kafka-console-producer --bootstrap-server broker-1:29092 --topic hello_world < /data/message.json && \
+               kafka-topics --create --topic wikimedia.recentchange --partitions 1 --replication-factor 1 --if-not-exists --bootstrap-server broker-1:29092'"
+
+
+volumes:
+  conduktor_data: {}
