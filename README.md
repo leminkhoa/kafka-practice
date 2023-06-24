@@ -1,11 +1,26 @@
 # Kafka Practice
 This repository is used for praticing Kafka's purposes.
 
-## Getting Started
+## Prerequisites
 
 ### Kafka Version
-For this repository, we will use `Kafka 2.13-3.4.1` (Scala version 2.13 and Kafka version 3.4.1). You can download it [here](https://downloads.apache.org/kafka/3.4.1/kafka_2.13-3.4.1.tgz)
+For this repository, we will use `Kafka 2.13-3.4.1` (Scala version 2.13 and Kafka version 3.4.1) to act as both Producer and Consumer. You can download it [here](https://downloads.apache.org/kafka/3.4.1/kafka_2.13-3.4.1.tgz)
 
+### Java Version
+- Version: openjdk 11
+- Install command: `sudo apt-get install openjdk-11-jdk`
+
+### Gradle Version
+- Version: Gradle 8.1.1
+- Download url: https://gradle.org/next-steps/?version=8.1.1&format=bin
+- Unzip the distribution zip file in the directory of your choosing:
+```
+$ mkdir /opt/gradle
+$ unzip -d /opt/gradle gradle-8.1.1-bin.zip
+$ ls /opt/gradle/gradle-8.1.1
+LICENSE  NOTICE  bin  getting-started.html  init.d  lib  media
+```
+- Add PATH to bashrc: `PATH=$PATH:/opt/gradle/gradle-8.1.1/bin`
 
 ### Start Docker 
 Within bash terminal, run:
